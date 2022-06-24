@@ -22,7 +22,6 @@ import Buy from './Buy'
 import PoolFinder from './PoolFinder'
 import RemoveLiquidity from './RemoveLiquidity'
 import { RedirectOldRemoveLiquidityPathStructure } from './RemoveLiquidity/redirects'
-import Dashboard from './Dashboard'
 import Swap from './Swap'
 import { RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects'
 import Airdrop from './Airdrop'
@@ -33,23 +32,7 @@ import VotePage from './Vote/VotePage'
 import IDO from './IDO'
 import Migrate from './Earn/Migrate'
 
-import MigrateV2 from './Migrate'
 import { useIsBetaUI } from '../hooks/useLocation'
-import CustomRoute from './Route'
-import Layout from '../layout'
-
-import SwapV2 from './Beta/Swap'
-import StakeV2 from './Beta/Stake'
-
-import GovernanceV2 from './Beta/Governance'
-import GovernanceDetailV2 from './Beta/GovernanceDetail'
-import BuyV2 from './Beta/Buy'
-import PoolV2 from './Beta/Pool'
-import BridgeV2 from './Beta/Bridge'
-import AirdropV2 from './Beta/Airdrop2'
-import { BETA_MENU_LINK } from 'src/constants'
-
-import Policy from './Beta/Policy'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -142,52 +125,6 @@ export default function App() {
                 exact
                 path="/migrate/:currencyIdFromA/:currencyIdFromB/:versionFrom/:currencyIdToA/:currencyIdToB/:versionTo/"
                 component={Migrate}
-              />
-
-              <CustomRoute exact path={`${BETA_MENU_LINK.dashboard}`} component={Dashboard} layout={Layout} />
-              <CustomRoute exact path={`${BETA_MENU_LINK.migrate}/:version`} component={MigrateV2} layout={Layout} />
-
-              <CustomRoute exact path={`${BETA_MENU_LINK.swap}`} component={SwapV2} layout={Layout} />
-              <CustomRoute exact strict path={`${BETA_MENU_LINK.stake}/:version`} component={StakeV2} layout={Layout} />
-              {/* <CustomRoute
-                exact
-                strict
-                path="/beta/stake/:version/:rewardCurrencyId"
-                component={ManageStakeV2}
-                layout={Layout}
-              /> */}
-              <CustomRoute exact path={`${BETA_MENU_LINK.vote}`} component={GovernanceV2} layout={Layout} />
-              <CustomRoute
-                exact
-                strict
-                path={`${BETA_MENU_LINK.vote}/:id`}
-                component={GovernanceDetailV2}
-                layout={Layout}
-              />
-              <CustomRoute exact strict path={`${BETA_MENU_LINK.buy}`} component={BuyV2} layout={Layout} />
-              <CustomRoute exact path={`${BETA_MENU_LINK.pool}`} component={PoolV2} layout={Layout} />
-              <CustomRoute exact path={`${BETA_MENU_LINK.bridge}`} component={BridgeV2} layout={Layout} />
-              <CustomRoute exact path={`${BETA_MENU_LINK.airdrop}`} component={AirdropV2} layout={Layout} />
-
-              {/* <Route exact path="/beta/migrate/:version" component={MigrateV2} /> */}
-
-              <CustomRoute
-                exact
-                path="/beta/policy/privacy"
-                component={() => <Policy policy="privacy" />}
-                layout={Layout}
-              />
-              <CustomRoute
-                exact
-                path="/beta/policy/cookie"
-                component={() => <Policy policy="cookie" />}
-                layout={Layout}
-              />
-              <CustomRoute
-                exact
-                path="/beta/policy/terms"
-                component={() => <Policy policy="terms" />}
-                layout={Layout}
               />
 
               <Route component={RedirectPathToSwapOnly} />
