@@ -118,10 +118,11 @@ export function useDataFromEventLogs() {
 
   const proposalIndexes = []
   for (let i = 1; i <= (proposalCount ?? 0); i++) {
-    proposalIndexes.push([i])
+    if(i != 17 && i != 18)proposalIndexes.push([i])
   }
 
   const allProposals = useSingleContractMultipleData(govContract, 'proposals', proposalIndexes)
+  
 
   useEffect(() => {
     const voteDelay: number = 60 * 60 * 24
@@ -131,6 +132,8 @@ export function useDataFromEventLogs() {
       let pastEvents = [] as any[]
 
       for (const proposal of allProposals) {
+        //console.log(Number(proposal?.result?.id))
+        //if(Number(proposal?.result?.id) !== 17){
         const startTime: number = parseInt(proposal?.result?.startTime?.toString())
         if (startTime) {
           const eventTime: number = startTime - voteDelay
@@ -142,7 +145,10 @@ export function useDataFromEventLogs() {
           }
           pastEvents = pastEvents.concat(await library?.getLogs(filter))
         }
+      //}
       }
+
+      //console.log(allProposals[16].result.id)
 
       const formattedEventData = pastEvents
         ?.map(event => eventParser.parseLog(event).args)
@@ -172,7 +178,7 @@ export function useDataFromEventLogs() {
       govContract &&
       proposalCount !== undefined &&
       allProposals &&
-      allProposals.length === proposalCount &&
+      //allProposals.length === proposalCount &&
       allProposals.every(proposal => !proposal.loading) &&
       !formattedEvents
     ) {
@@ -211,7 +217,7 @@ export function useAllProposalData() {
 
   const proposalIndexes = []
   for (let i = 1; i <= (proposalCount ?? 0); i++) {
-    proposalIndexes.push([i])
+    if(i != 17 && i != 18)proposalIndexes.push([i])
   }
 
   // get metadata from past events
@@ -236,7 +242,7 @@ export function useAllProposalData() {
         const formattedProposal: ProposalData = {
           id: allProposals[i]?.result?.id.toString(),
           title: description?.split(/# |\n/g)[1] || 'Untitled',
-          description: description || 'No description.',
+          description: description.replaceAll("\\n", "\n") || 'No description.',
           proposer: allProposals[i]?.result?.proposer,
           status: enumerateProposalState(allProposalStates[i]?.result?.[0]) ?? 'Undetermined',
           forCount: parseFloat(ethers.utils.formatUnits(allProposals[i]?.result?.forVotes.toString(), 18)),
@@ -282,7 +288,7 @@ export function useGetProposalsViaSubgraph(id?: string) {
           return {
             id: proposal?.id.toString(),
             title: proposal?.description?.split(/# |\n/g)[1] || 'Untitled',
-            description: proposal?.description || 'No description.',
+            description: proposal?.description.replaceAll("\\n", "\n") || 'No description.',
             proposer: proposal?.proposer,
             status:
               getProposalState({ ...proposal, forCount: proposal?.forVotes, againstCount: proposal?.againstVotes }) ??
